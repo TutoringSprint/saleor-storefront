@@ -1,13 +1,7 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 
-import {
-  incrementalStaticRegenerationRevalidate,
-  staticPathsFallback,
-  staticPathsFetchBatch,
-} from "@temp/constants";
 import { CategoryView, CategoryViewProps } from "@temp/views/Category";
 import {
-  exhaustList,
   getFeaturedProducts,
   getSaleorApi,
   getShopAttributes,
@@ -15,27 +9,12 @@ import {
 
 export default CategoryView;
 
-export const getStaticPaths: GetStaticPaths<
-  CategoryViewProps["params"]
-> = async () => {
-  const { api } = await getSaleorApi();
-  const { data } = await exhaustList(
-    api.categories.getList({
-      first: staticPathsFetchBatch,
-    })
-  );
-
-  const paths = data.map(({ slug }) => ({
-    params: { slug },
-  }));
-
-  return { paths, fallback: staticPathsFallback };
-};
-
-export const getStaticProps: GetStaticProps<
+export const getServerSideProps: GetServerSideProps<
   CategoryViewProps,
   CategoryViewProps["params"]
-> = async ({ params: { slug } }) => {
+> = async context => {
+  const { params } = context;
+  const slug = params.slug as string;
   let data = null;
   const { api } = await getSaleorApi();
   const { data: details } = await api.categories.getDetails({ slug });
@@ -56,12 +35,7 @@ export const getStaticProps: GetStaticProps<
       id,
     };
   }
-
   return {
-    revalidate: incrementalStaticRegenerationRevalidate,
-    props: {
-      data,
-      params: { slug },
-    },
+    props: { data: data || null, params },
   };
 };

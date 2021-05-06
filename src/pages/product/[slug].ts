@@ -1,13 +1,10 @@
 import { VariantAttributeScope } from "@saleor/sdk";
-import { GetStaticPaths, GetStaticProps, GetServerSideProps } from "next";
+import { GetServerSideProps } from "next";
 
 import {
   channelSlug,
-  incrementalStaticRegenerationRevalidate,
-  staticPathsFallback,
-  staticPathsFetchBatch,
 } from "@temp/constants";
-import { exhaustList, getSaleorApi } from "@utils/ssr";
+import { getSaleorApi } from "@utils/ssr";
 
 import { ProductPage, ProductPageProps } from "../../views/Product";
 

@@ -1,9 +1,7 @@
 import { VariantAttributeScope } from "@saleor/sdk";
 import { GetServerSideProps } from "next";
 
-import {
-  channelSlug,
-} from "@temp/constants";
+import { channelSlug } from "@temp/constants";
 import { getSaleorApi } from "@utils/ssr";
 
 import { ProductPage, ProductPageProps } from "../../views/Product";
@@ -23,5 +21,5 @@ export const getServerSideProps: GetServerSideProps<
   });
   return {
     props: { data: data || null, params },
-  }
+  };
 };
